@@ -3,8 +3,6 @@
   <h1>Catime-Plugins</h1>
 </div>
 
-## Plugins
-
 <div align="center">
 
 | Name | Description | Preview | Download | Note |
