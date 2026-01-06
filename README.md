@@ -43,3 +43,15 @@ Select language ❯ [Deutsch](./i18n/PLUGIN_GUIDE_de.md) • [English](./i18n/PL
 <a href="https://github.com/vladelaina/Catime-Plugins/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=vladelaina/Catime-Plugins" />
 </a>
+
+
+---
+
+<div align="center">
+
+Copyright © 2025-2026 - **Catime**\
+By vladelaina\
+Made with ❤️ & ⌨️
+
+</div>
+
