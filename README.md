@@ -15,7 +15,11 @@ Select language ❯ [Deutsch](./i18n/PLUGIN_GUIDE_de.md) • [English](./i18n/PL
 
 
 
+##  🌟Sample plugins
+
 > Just drag into plugins file ₍^˶ ╸𖥦 ╸˵^₎⟆
+> 
+> Plugins write to output.txt, Catime displays it — that simple.
 
 <div align="center">
 
