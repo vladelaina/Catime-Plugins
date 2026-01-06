@@ -13,7 +13,7 @@
 | [bilibili_uploader_fans](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_uploader_fans.bat) | Bilibili fans count | <img width="481" height="179" alt="image" src="https://github.com/user-attachments/assets/7c999909-8c1c-4dc8-bd38-546e757bd046" /> |  |
 | [bitcoin_monitor](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bitcoin_monitor.bat) | Bitcoin price | <img width="1105" height="481" alt="image" src="https://github.com/user-attachments/assets/f9753da5-3945-465a-9b2d-76a9e1b5b3c4" />|  |
 | [douyin_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/douyin_video.py) | Douyin video stats | <img width="1140" height="153" alt="image" src="https://github.com/user-attachments/assets/ce715ecf-c7d5-40ac-ac96-c55401881b61" />| Python |
-| [gaokao_countdown](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/gaokao_countdown.bat) | Gaokao countdown |  |  |
+| [gaokao_countdown](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/gaokao_countdown.bat) | Gaokao countdown | ![2026-01-06_12-35-49](https://github.com/user-attachments/assets/aadfaad7-a36f-4676-b1cb-4a888dbc6ba0) |  |
 | [github_star](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/github_star.bat) | GitHub stars |  |  |
 | [nasdaq_sp500](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/nasdaq_sp500.bat) | NASDAQ/S&P 500 |  |  |
 | [pomodoro_timer](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/pomodoro_timer.bat) | Pomodoro timer |  |  |
