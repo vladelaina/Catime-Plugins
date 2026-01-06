@@ -3,26 +3,27 @@
   <h1>Catime-Plugins</h1>
 </div>
 
+
 <div align="center">
 
-| Name | Description | Preview | Download | Note |
-| --- | --- | --- | --- | --- |
-| animation | Animation effects |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/animation.bat) |  |
-| bilibili_monitor_video | Bilibili video stats |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_monitor_video.bat) |  |
-| bilibili_uploader_fans | Bilibili fans count |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_uploader_fans.bat) |  |
-| bitcoin_monitor | Bitcoin price |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bitcoin_monitor.bat) |  |
-| douyin_video | Douyin video stats |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/douyin_video.py) | Python |
-| gaokao_countdown | Gaokao countdown |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/gaokao_countdown.bat) |  |
-| github_star | GitHub stars |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/github_star.bat) |  |
-| nasdaq_sp500 | NASDAQ/S&P 500 |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/nasdaq_sp500.bat) |  |
-| pomodoro_timer | Pomodoro timer |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/pomodoro_timer.bat) |  |
-| quotes | Poison soup quotes |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/quotes.bat) |  |
-| system_monitor | System resources |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/system_monitor.bat) |  |
-| twitter_followers | Twitter followers |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_followers.bat) |  |
-| twitter_post | Twitter post stats |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_post.bat) |  |
-| weather | Weather forecast |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/weather.bat) |  |
-| youtube_channel | YouTube channel |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/youtube_channel.bat) |  |
-| youtube_video | YouTube video stats |  | [Download](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/youtube_video.bat) |  |
+| Name | Description | Preview | Note |
+| --- | --- | --- | --- |
+| [animation](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/animation.bat) | Animation effects |  ![2026-01-06_12-13-25](https://github.com/user-attachments/assets/12e8b002-1d85-45c4-a7b2-42b3108a2601)|  |
+| [bilibili_monitor_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_monitor_video.bat) | Bilibili video stats |  |  |
+| [bilibili_uploader_fans](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_uploader_fans.bat) | Bilibili fans count |  |  |
+| [bitcoin_monitor](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bitcoin_monitor.bat) | Bitcoin price |  |  |
+| [douyin_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/douyin_video.py) | Douyin video stats |  | Python |
+| [gaokao_countdown](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/gaokao_countdown.bat) | Gaokao countdown |  |  |
+| [github_star](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/github_star.bat) | GitHub stars |  |  |
+| [nasdaq_sp500](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/nasdaq_sp500.bat) | NASDAQ/S&P 500 |  |  |
+| [pomodoro_timer](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/pomodoro_timer.bat) | Pomodoro timer |  |  |
+| [quotes](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/quotes.bat) | Poison soup quotes |  |  |
+| [system_monitor](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/system_monitor.bat) | System resources |  |  |
+| [twitter_followers](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_followers.bat) | Twitter followers |  |  |
+| [twitter_post](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_post.bat) | Twitter post stats |  |  |
+| [weather](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/weather.bat) | Weather forecast |  |  |
+| [youtube_channel](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/youtube_channel.bat) | YouTube channel |  |  |
+| [youtube_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/youtube_video.bat) | YouTube video stats |  |  |
 
 </div>
 
