@@ -18,7 +18,7 @@
 | [nasdaq_sp500](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/nasdaq_sp500.bat) | NASDAQ/S&P 500 | <img width="383" height="550" alt="image" src="https://github.com/user-attachments/assets/e178ed3e-f5fc-47a7-a1fc-2d5ea8b24652" /> |  |
 | [pomodoro_timer](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/pomodoro_timer.bat) | Pomodoro timer |![2026-01-06_12-43-04](https://github.com/user-attachments/assets/04b64847-e853-4f7d-bf61-8f880fd4a97e)  |  |
 | [quotes](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/quotes.bat) | Poison soup quotes |  ![2026-01-06_12-50-40 (online-video-cutter com)](https://github.com/user-attachments/assets/0138598f-af41-4f7f-9deb-6c96c648383a)|  |
-| [system_monitor](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/system_monitor.bat) | System resources |  |  |
+| [system_monitor](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/system_monitor.bat) | System resources | <img width="383" height="321" alt="image" src="https://github.com/user-attachments/assets/33815f04-8c01-49e1-b643-45e65bc712c7" />| Loading time takes about 5s |
 | [twitter_followers](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_followers.bat) | Twitter followers |  |  |
 | [twitter_post](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_post.bat) | Twitter post stats |  |  |
 | [weather](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/weather.bat) | Weather forecast |  |  |
