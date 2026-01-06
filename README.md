@@ -7,7 +7,13 @@
 
 Select language ❯ [Deutsch](./i18n/PLUGIN_GUIDE_de.md) • [English](./i18n/PLUGIN_GUIDE_en.md) • [Español](./i18n/PLUGIN_GUIDE_es.md) • [Français](./i18n/PLUGIN_GUIDE_fr.md) • [日本語](./i18n/PLUGIN_GUIDE_ja.md) • [한국어](./i18n/PLUGIN_GUIDE_ko.md) • [Português](./i18n/PLUGIN_GUIDE_pt.md) • [Русский](./i18n/PLUGIN_GUIDE_ru.md) • [简体中文](./i18n/PLUGIN_GUIDE_zh-CN.md) • [繁體中文](./i18n/PLUGIN_GUIDE_zh-Hant.md)
 
-## 🌟Plugins
+## ❤️‍🔥Staying tuned with us
+>  **Star us** and witness how this pure C-crafted minimalist time tool continues to evolve - don't miss any exciting updates!
+<a href="https://github.com/vladelaina/Catime" target="_blank">
+    <img  src="https://github.com/user-attachments/assets/50cfc9d4-3d3f-4370-b233-89d76f78977e" />
+</a>
+
+
 
 > Just drag into plugins file ₍^˶ ╸𖥦 ╸˵^₎⟆
 
