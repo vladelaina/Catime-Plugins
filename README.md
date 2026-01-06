@@ -3,6 +3,11 @@
   <h1>Catime-Plugins</h1>
 </div>
 
+## Plugin Guide
+
+Select language ❯ [Deutsch](./i18n/PLUGIN_GUIDE_de.md) • [English](./i18n/PLUGIN_GUIDE_en.md) • [Español](./i18n/PLUGIN_GUIDE_es.md) • [Français](./i18n/PLUGIN_GUIDE_fr.md) • [日本語](./i18n/PLUGIN_GUIDE_ja.md) • [한국어](./i18n/PLUGIN_GUIDE_ko.md) • [Português](./i18n/PLUGIN_GUIDE_pt.md) • [Русский](./i18n/PLUGIN_GUIDE_ru.md) • [简体中文](./i18n/PLUGIN_GUIDE_zh-CN.md) • [繁體中文](./i18n/PLUGIN_GUIDE_zh-Hant.md)
+
+## 🌟Plugins
 
 <div align="center">
 
