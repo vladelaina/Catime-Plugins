@@ -9,6 +9,8 @@ Select language ❯ [Deutsch](./i18n/PLUGIN_GUIDE_de.md) • [English](./i18n/PL
 
 ## 🌟Plugins
 
+> Just drag into plugins file ₍^˶ ╸𖥦 ╸˵^₎⟆
+
 <div align="center">
 
 | Name | Description | Preview | Note |
