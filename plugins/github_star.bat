@@ -8,7 +8,7 @@ set TOKEN=
 set OUTPUT_FILE=output.txt
 set TEMP_JSON=temp_data.json
 set CURL_TIMEOUT_SEC=10
-set REQUEST_INTERVAL_SEC=60
+set REQUEST_INTERVAL_SEC=600
 
 :: Build API URL from normal repo URL (easier for users to edit).
 set URL=
