@@ -9,7 +9,7 @@
 | Name | Description | Preview | Note |
 | --- | --- | --- | --- |
 | [animation](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/animation.bat) | Animation effects |  ![2026-01-06_12-13-25](https://github.com/user-attachments/assets/12e8b002-1d85-45c4-a7b2-42b3108a2601)|  |
-| [bilibili_monitor_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_monitor_video.bat) | Bilibili video stats |  |  |
+| [bilibili_monitor_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_monitor_video.bat) | Bilibili video stats |<img width="483" height="371" alt="image" src="https://github.com/user-attachments/assets/1ddbf02d-3c73-48d1-ba63-5baba3fb8a80" />  |  |
 | [bilibili_uploader_fans](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_uploader_fans.bat) | Bilibili fans count |  |  |
 | [bitcoin_monitor](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bitcoin_monitor.bat) | Bitcoin price |  |  |
 | [douyin_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/douyin_video.py) | Douyin video stats |  | Python |
