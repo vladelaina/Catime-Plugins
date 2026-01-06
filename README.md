@@ -20,7 +20,7 @@
 | [quotes](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/quotes.bat) | Poison soup quotes |  ![2026-01-06_12-50-40 (online-video-cutter com)](https://github.com/user-attachments/assets/0138598f-af41-4f7f-9deb-6c96c648383a)|  |
 | [system_monitor](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/system_monitor.bat) | System resources | <img width="383" height="321" alt="image" src="https://github.com/user-attachments/assets/33815f04-8c01-49e1-b643-45e65bc712c7" />| Loading time takes about 5s |
 | [twitter_followers](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_followers.bat) | Twitter followers | <img width="659" height="530" alt="image" src="https://github.com/user-attachments/assets/0e699c59-e51a-4704-be56-7564f9554f45" />|  |
-| [twitter_post](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_post.bat) | Twitter post stats |  |  |
+| [twitter_post](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/twitter_post.bat) | Twitter post stats |<img width="663" height="601" alt="image" src="https://github.com/user-attachments/assets/37b959e3-c241-43ce-a003-865cc9f512d7" /> |  |
 | [weather](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/weather.bat) | Weather forecast |  |  |
 | [youtube_channel](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/youtube_channel.bat) | YouTube channel |  |  |
 | [youtube_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/youtube_video.bat) | YouTube video stats |  |  |
