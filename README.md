@@ -17,8 +17,9 @@ Select language ❯ [Deutsch](./i18n/PLUGIN_GUIDE_de.md) • [English](./i18n/PL
 
 ##  🌟Sample plugins
 
-> Just drag into plugins file(C:\Users\username\AppData\Local\Catime\resources\plugins) ₍^˶ ╸𖥦 ╸˵^₎⟆
-> 
+> Click the plugin name below, then click the Download button. After that, just drag it into the plugins folder (C:\Users\username\AppData\Local\Catime\resources\plugins) ₍^˶ ╸𖥦 ╸˵^₎⟆
+> <img width="904"  alt="image" src="https://github.com/user-attachments/assets/c0ea8ec1-6e99-4c54-918c-71a8f2eb025c" />
+
 > Plugins write to output.txt, Catime displays it — that simple.
 >
 > 🎁 Got something cool? Share your plugin via PR! ꉂ ᳐˶ᵒ ᵕ ˂˶ ᳐ฅ**
