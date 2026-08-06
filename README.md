@@ -24,10 +24,37 @@ Select language ❯ [Deutsch](./i18n/PLUGIN_GUIDE_de.md) • [English](./i18n/PL
 >
 > 🎁 Got something cool? Share your plugin via PR! ꉂ ᳐˶ᵒ ᵕ ˂˶ ᳐ฅ**
 
+## Create a Plugin with AI
+
+1. Clone this repository and enter its directory:
+
+   ```bash
+   git clone https://github.com/vladelaina/Catime-Plugins.git
+   cd Catime-Plugins
+   ```
+
+2. Open your AI coding assistant in the repository directory, paste the prompt below, and fill in the final line:
+
+   ```text
+   Review the existing plugins in this repository's plugins directory, then create a concise Windows BAT plugin for Catime.
+
+   Requirements:
+   1. Place the plugin in the plugins directory. Use a lowercase snake_case filename that describes only its specific function and avoids broad names.
+   2. Use only BAT and the PowerShell included with Windows. Do not add third-party dependencies.
+   3. Continuously write the display content to %~dp0output.txt beside the script. Do not rely on the launch-time working directory.
+   4. Write output.txt as UTF-8 without a BOM, and save the BAT file with CRLF line endings.
+   5. Handle Chinese text correctly without relying on the system language. Use Unicode code points or explicit Chinese mappings when needed to prevent mojibake.
+   6. Keep the implementation concise, implement only the requested feature, and do not modify unrelated files.
+   7. Run the plugin to verify its output, then remove the generated output.txt test file.
+
+   Feature and expected output format: [describe them here]
+   ```
+
 <div align="center">
 
 | Name | Description | Preview | Note |
 | --- | --- | --- | --- |
+| [time_date_weekday](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/time_date_weekday.bat) | Current time, date, and weekday |  |  |
 | [animation](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/animation.bat) | Animation effects |  ![2026-01-06_12-13-25](https://github.com/user-attachments/assets/12e8b002-1d85-45c4-a7b2-42b3108a2601)|  |
 | [bilibili_monitor_video](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_monitor_video.bat) | Bilibili video stats |<img width="483" height="371" alt="image" src="https://github.com/user-attachments/assets/1ddbf02d-3c73-48d1-ba63-5baba3fb8a80" />  |  |
 | [bilibili_uploader_fans](https://github.com/vladelaina/Catime-Plugins/blob/main/plugins/bilibili_uploader_fans.bat) | Bilibili fans count | <img width="481" height="179" alt="image" src="https://github.com/user-attachments/assets/7c999909-8c1c-4dc8-bd38-546e757bd046" /> |  |
