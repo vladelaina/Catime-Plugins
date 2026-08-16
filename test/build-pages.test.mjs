@@ -13,7 +13,10 @@ const fixture = {
     previewUrl: 'https://github.com/user-attachments/assets/01234567-89ab-cdef-0123-456789abcdef',
   }],
 };
-const previewBytes = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const previewBytes = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAADUlEQVQImWOoaOr5DwAFggKGjKIzhwAAAABJRU5ErkJggg==',
+  'base64',
+);
 
 test('builds a versioned catalog and preserves plugin bytes', async t => {
   const root = await createFixture();
@@ -38,11 +41,12 @@ test('builds a versioned catalog and preserves plugin bytes', async t => {
     'https://example.github.io/plugins/files/hello_world.bat?v=c134b2f85415',
   );
   assert.match(
-    catalog.plugins[0].previewUrl,
-    /^https:\/\/example\.github\.io\/plugins\/previews\/hello_world\.png\?v=[a-f0-9]{12}$/,
+    catalog.plugins[0].posterUrl,
+    /^https:\/\/example\.github\.io\/plugins\/posters\/hello_world\.webp\?v=[a-f0-9]{12}$/,
   );
+  assert.equal(catalog.plugins[0].previewUrl, catalog.plugins[0].posterUrl);
   assert.deepEqual(await readFile(join(root, '_site/files/hello_world.bat')), sourceBytes);
-  assert.deepEqual(await readFile(join(root, '_site/previews/hello_world.png')), previewBytes);
+  assert.equal((await readFile(join(root, '_site/posters/hello_world.webp'))).subarray(8, 12).toString(), 'WEBP');
   assert.deepEqual(JSON.parse(await readFile(join(root, '_site/api/v1/catalog.json'), 'utf8')), catalog);
 });
 

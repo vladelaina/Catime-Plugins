@@ -6,5 +6,8 @@
   "scripts": {
     "build": "node scripts/build-pages.mjs",
     "test": "node --test"
+  },
+  "dependencies": {
+    "sharp": "0.35.3"
   }
 }

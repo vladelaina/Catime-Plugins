@@ -11,13 +11,16 @@ import {
 } from 'node:fs/promises';
 import { basename, extname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 const DEFAULT_REPOSITORY = 'https://github.com/vladelaina/Catime-Plugins';
 const DEFAULT_PAGES_URL = 'https://vladelaina.github.io/Catime-Plugins';
 const ALLOWED_EXTENSIONS = new Set(['.bat', '.py']);
 const MAX_PLUGIN_BYTES = 1024 * 1024;
 const MAX_PREVIEW_BYTES = 8 * 1024 * 1024;
-const PREVIEW_CONCURRENCY = 6;
+const PREVIEW_CONCURRENCY = 4;
+const PREVIEW_FETCH_ATTEMPTS = 3;
+const PREVIEW_FETCH_TIMEOUT_MS = 60_000;
 const ENTRY_FIELDS = new Set(['id', 'file', 'previewUrl']);
 const PREVIEW_TYPES = new Map([
   ['image/gif', 'gif'],
@@ -48,6 +51,7 @@ export async function buildPages({
   await Promise.all([
     mkdir(resolve(output, 'api/v1'), { recursive: true }),
     mkdir(resolve(output, 'files'), { recursive: true }),
+    mkdir(resolve(output, 'posters'), { recursive: true }),
     mkdir(resolve(output, 'previews'), { recursive: true }),
   ]);
 
@@ -72,7 +76,7 @@ export async function buildPages({
     const contents = await readFile(sourceFile);
     const sha256 = createHash('sha256').update(contents).digest('hex');
     const filename = basename(entry.file);
-    const previewUrl = await publishPreview({
+    const preview = await publishPreview({
       sourceUrl: entry.previewUrl,
       id: entry.id,
       label: `${label}.previewUrl`,
@@ -85,7 +89,8 @@ export async function buildPages({
 
     return {
       id: entry.id,
-      previewUrl,
+      posterUrl: preview.posterUrl,
+      previewUrl: preview.previewUrl,
       filename,
       size: contents.byteLength,
       sha256,
@@ -153,31 +158,74 @@ function validateEntry(entry, label) {
 
 async function publishPreview({ sourceUrl, id, label, output, pagesUrl, fetchImpl }) {
   const normalizedSource = normalizePreviewSource(sourceUrl, label);
-  let response;
-  try {
-    response = await fetchImpl(normalizedSource, {
-      redirect: 'follow',
-      headers: { accept: 'image/gif,image/png,image/jpeg,image/webp' },
-    });
-  } catch (error) {
-    throw new Error(`${label} could not be downloaded: ${error.message}`);
+  const { contents, contentType, extension } = await downloadPreview(fetchImpl, normalizedSource, label);
+
+  const poster = await createPoster(contents, label);
+  const posterHash = createHash('sha256').update(poster).digest('hex');
+  const posterFilename = `${id}.webp`;
+  await writeFile(resolve(output, 'posters', posterFilename), poster);
+  const posterUrl = `${pagesUrl}/posters/${encodeURIComponent(posterFilename)}?v=${posterHash.slice(0, 12)}`;
+
+  const metadata = await sharp(contents, { limitInputPixels: 40_000_000 }).metadata();
+  if ((metadata.pages || 1) <= 1) return { posterUrl, previewUrl: posterUrl };
+
+  const previewHash = createHash('sha256').update(contents).digest('hex');
+  const previewFilename = `${id}.${extension}`;
+  await writeFile(resolve(output, 'previews', previewFilename), contents);
+  return {
+    posterUrl,
+    previewUrl: `${pagesUrl}/previews/${encodeURIComponent(previewFilename)}?v=${previewHash.slice(0, 12)}`,
+  };
+}
+
+async function downloadPreview(fetchImpl, sourceUrl, label) {
+  let lastError;
+  for (let attempt = 1; attempt <= PREVIEW_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetchImpl(sourceUrl, {
+        redirect: 'follow',
+        headers: { accept: 'image/gif,image/png,image/jpeg,image/webp' },
+        signal: AbortSignal.timeout(PREVIEW_FETCH_TIMEOUT_MS),
+      });
+      if (!response?.ok) throw new Error(`returned HTTP ${response?.status ?? 'unknown'}`);
+      validatePreviewResponseUrl(response.url, label);
+
+      const contentType = String(response.headers?.get('content-type') || '').split(';', 1)[0].trim().toLowerCase();
+      const extension = PREVIEW_TYPES.get(contentType);
+      if (!extension) throw new Error(`returned unsupported content type ${contentType || 'unknown'}`);
+
+      const declaredSize = Number.parseInt(response.headers?.get('content-length') || '0', 10);
+      if (declaredSize > MAX_PREVIEW_BYTES) throw new Error(`exceeds ${MAX_PREVIEW_BYTES} bytes`);
+      const contents = await readLimitedResponse(response, MAX_PREVIEW_BYTES, label);
+      validateImageSignature(contents, contentType, label);
+      return { contents, contentType, extension };
+    } catch (error) {
+      lastError = error;
+      if (attempt < PREVIEW_FETCH_ATTEMPTS) await delay(400 * attempt);
+    }
   }
-  if (!response?.ok) throw new Error(`${label} returned HTTP ${response?.status ?? 'unknown'}`);
-  validatePreviewResponseUrl(response.url, label);
+  throw new Error(`${label} could not be downloaded after ${PREVIEW_FETCH_ATTEMPTS} attempts: ${lastError?.message || 'unknown error'}`);
+}
 
-  const contentType = String(response.headers?.get('content-type') || '').split(';', 1)[0].trim().toLowerCase();
-  const extension = PREVIEW_TYPES.get(contentType);
-  if (!extension) throw new Error(`${label} returned unsupported content type ${contentType || 'unknown'}`);
+function delay(milliseconds) {
+  return new Promise(resolveDelay => setTimeout(resolveDelay, milliseconds));
+}
 
-  const declaredSize = Number.parseInt(response.headers?.get('content-length') || '0', 10);
-  if (declaredSize > MAX_PREVIEW_BYTES) throw new Error(`${label} exceeds ${MAX_PREVIEW_BYTES} bytes`);
-  const contents = await readLimitedResponse(response, MAX_PREVIEW_BYTES, label);
-  validateImageSignature(contents, contentType, label);
-
-  const sha256 = createHash('sha256').update(contents).digest('hex');
-  const filename = `${id}.${extension}`;
-  await writeFile(resolve(output, 'previews', filename), contents);
-  return `${pagesUrl}/previews/${encodeURIComponent(filename)}?v=${sha256.slice(0, 12)}`;
+async function createPoster(contents, label) {
+  try {
+    return await sharp(contents, {
+      page: 0,
+      pages: 1,
+      limitInputPixels: 40_000_000,
+    }).webp({
+      quality: 84,
+      alphaQuality: 90,
+      smartSubsample: true,
+      effort: 4,
+    }).toBuffer();
+  } catch (error) {
+    throw new Error(`${label} could not be optimized: ${error.message}`);
+  }
 }
 
 function normalizePreviewSource(value, label) {
