@@ -16,7 +16,15 @@ const DEFAULT_REPOSITORY = 'https://github.com/vladelaina/Catime-Plugins';
 const DEFAULT_PAGES_URL = 'https://vladelaina.github.io/Catime-Plugins';
 const ALLOWED_EXTENSIONS = new Set(['.bat', '.py']);
 const MAX_PLUGIN_BYTES = 1024 * 1024;
-const RUNTIMES = new Set(['windows', 'python']);
+const MAX_PREVIEW_BYTES = 8 * 1024 * 1024;
+const PREVIEW_CONCURRENCY = 6;
+const ENTRY_FIELDS = new Set(['id', 'file', 'previewUrl']);
+const PREVIEW_TYPES = new Map([
+  ['image/gif', 'gif'],
+  ['image/jpeg', 'jpg'],
+  ['image/png', 'png'],
+  ['image/webp', 'webp'],
+]);
 
 export async function buildPages({
   root,
@@ -25,6 +33,7 @@ export async function buildPages({
   pagesUrl = DEFAULT_PAGES_URL,
   commit = resolveCommit(root),
   generatedAt = resolveCommitDate(root, commit),
+  fetchImpl = fetch,
 } = {}) {
   if (!root) throw new Error('root is required');
   const source = JSON.parse(await readFile(resolve(root, 'data/plugins.json'), 'utf8'));
@@ -34,22 +43,25 @@ export async function buildPages({
   const normalizedPagesUrl = normalizeHttpsUrl(pagesUrl, 'pagesUrl').replace(/\/$/, '');
   const seenIds = new Set();
   const seenFiles = new Set();
-  const plugins = [];
 
   await rm(output, { recursive: true, force: true });
   await Promise.all([
     mkdir(resolve(output, 'api/v1'), { recursive: true }),
     mkdir(resolve(output, 'files'), { recursive: true }),
+    mkdir(resolve(output, 'previews'), { recursive: true }),
   ]);
 
-  for (const [index, entry] of source.plugins.entries()) {
+  const entries = source.plugins.map((entry, index) => {
     const label = `plugins[${index}]`;
     validateEntry(entry, label);
     if (seenIds.has(entry.id)) throw new Error(`${label} duplicates id ${entry.id}`);
     if (seenFiles.has(entry.file.toLowerCase())) throw new Error(`${label} duplicates file ${entry.file}`);
     seenIds.add(entry.id);
     seenFiles.add(entry.file.toLowerCase());
+    return { entry, label };
+  });
 
+  const plugins = await mapWithConcurrency(entries, PREVIEW_CONCURRENCY, async ({ entry, label }) => {
     const sourceFile = resolveInsideRoot(root, entry.file, label);
     const stats = await lstat(sourceFile);
     if (!stats.isFile() || stats.isSymbolicLink()) throw new Error(`${label}.file must reference a regular file`);
@@ -60,26 +72,26 @@ export async function buildPages({
     const contents = await readFile(sourceFile);
     const sha256 = createHash('sha256').update(contents).digest('hex');
     const filename = basename(entry.file);
+    const previewUrl = await publishPreview({
+      sourceUrl: entry.previewUrl,
+      id: entry.id,
+      label: `${label}.previewUrl`,
+      output,
+      pagesUrl: normalizedPagesUrl,
+      fetchImpl,
+    });
     await copyFile(sourceFile, resolve(output, 'files', filename));
     const version = sha256.slice(0, 12);
 
-    plugins.push({
+    return {
       id: entry.id,
-      name: entry.name,
-      description: entry.description,
-      category: entry.category,
-      runtime: entry.runtime,
-      requiresNetwork: entry.requiresNetwork,
-      configurable: entry.configurable,
-      ...(entry.note ? { note: entry.note } : {}),
-      previewUrl: normalizeHttpsUrl(entry.previewUrl, `${label}.previewUrl`),
+      previewUrl,
       filename,
       size: contents.byteLength,
       sha256,
       downloadUrl: `${normalizedPagesUrl}/files/${encodeURIComponent(filename)}?v=${version}`,
-      sourceUrl: `${normalizedRepository}/blob/${encodeURIComponent(commit)}/${encodePath(entry.file)}`,
-    });
-  }
+    };
+  });
 
   const pluginDirectoryEntries = await readdir(resolve(root, 'plugins'), { withFileTypes: true });
   for (const entry of pluginDirectoryEntries) {
@@ -100,7 +112,6 @@ export async function buildPages({
     source: {
       repository: normalizedRepository,
       commit,
-      guideUrl: normalizeHttpsUrl(source.guideUrl, 'guideUrl'),
     },
     count: plugins.length,
     plugins,
@@ -134,25 +145,111 @@ function validateEntry(entry, label) {
   if (!ALLOWED_EXTENSIONS.has(extname(entry.file).toLowerCase())) {
     throw new Error(`${label}.file uses an unsupported extension`);
   }
-  validateLocalizedText(entry.name, `${label}.name`);
-  validateLocalizedText(entry.description, `${label}.description`);
-  if (entry.note !== undefined) validateLocalizedText(entry.note, `${label}.note`);
-  if (typeof entry.category !== 'string' || !/^[a-z][a-z0-9-]*$/.test(entry.category)) {
-    throw new Error(`${label}.category is invalid`);
-  }
-  if (!RUNTIMES.has(entry.runtime)) throw new Error(`${label}.runtime is invalid`);
-  for (const field of ['requiresNetwork', 'configurable']) {
-    if (typeof entry[field] !== 'boolean') throw new Error(`${label}.${field} must be boolean`);
+  normalizePreviewSource(entry.previewUrl, `${label}.previewUrl`);
+  for (const field of Object.keys(entry)) {
+    if (!ENTRY_FIELDS.has(field)) throw new Error(`${label}.${field} is not supported`);
   }
 }
 
-function validateLocalizedText(value, label) {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label} must be an object`);
-  for (const locale of ['en', 'zh']) {
-    if (typeof value[locale] !== 'string' || !value[locale].trim()) {
-      throw new Error(`${label}.${locale} must be a non-empty string`);
-    }
+async function publishPreview({ sourceUrl, id, label, output, pagesUrl, fetchImpl }) {
+  const normalizedSource = normalizePreviewSource(sourceUrl, label);
+  let response;
+  try {
+    response = await fetchImpl(normalizedSource, {
+      redirect: 'follow',
+      headers: { accept: 'image/gif,image/png,image/jpeg,image/webp' },
+    });
+  } catch (error) {
+    throw new Error(`${label} could not be downloaded: ${error.message}`);
   }
+  if (!response?.ok) throw new Error(`${label} returned HTTP ${response?.status ?? 'unknown'}`);
+  validatePreviewResponseUrl(response.url, label);
+
+  const contentType = String(response.headers?.get('content-type') || '').split(';', 1)[0].trim().toLowerCase();
+  const extension = PREVIEW_TYPES.get(contentType);
+  if (!extension) throw new Error(`${label} returned unsupported content type ${contentType || 'unknown'}`);
+
+  const declaredSize = Number.parseInt(response.headers?.get('content-length') || '0', 10);
+  if (declaredSize > MAX_PREVIEW_BYTES) throw new Error(`${label} exceeds ${MAX_PREVIEW_BYTES} bytes`);
+  const contents = await readLimitedResponse(response, MAX_PREVIEW_BYTES, label);
+  validateImageSignature(contents, contentType, label);
+
+  const sha256 = createHash('sha256').update(contents).digest('hex');
+  const filename = `${id}.${extension}`;
+  await writeFile(resolve(output, 'previews', filename), contents);
+  return `${pagesUrl}/previews/${encodeURIComponent(filename)}?v=${sha256.slice(0, 12)}`;
+}
+
+function normalizePreviewSource(value, label) {
+  const normalized = normalizeHttpsUrl(value, label);
+  const url = new URL(normalized);
+  const attachmentPath = /^\/user-attachments\/assets\/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
+  if (url.hostname !== 'github.com' || !attachmentPath.test(url.pathname) || url.search || url.hash) {
+    throw new Error(`${label} must be a GitHub user attachment URL`);
+  }
+  return normalized;
+}
+
+function validatePreviewResponseUrl(value, label) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`${label} returned an invalid final URL`);
+  }
+  const githubAssetHost = /^github-production-user-asset-[a-z0-9-]+\.s3\.amazonaws\.com$/i;
+  if (url.protocol !== 'https:' || !githubAssetHost.test(url.hostname)) {
+    throw new Error(`${label} redirected to an unsupported host`);
+  }
+}
+
+async function readLimitedResponse(response, limit, label) {
+  if (!response.body?.getReader) {
+    const contents = Buffer.from(await response.arrayBuffer());
+    if (contents.length === 0 || contents.length > limit) throw new Error(`${label} has an invalid size`);
+    return contents;
+  }
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let total = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > limit) {
+      await reader.cancel();
+      throw new Error(`${label} exceeds ${limit} bytes`);
+    }
+    chunks.push(Buffer.from(value));
+  }
+  if (total === 0) throw new Error(`${label} is empty`);
+  return Buffer.concat(chunks, total);
+}
+
+function validateImageSignature(contents, contentType, label) {
+  const valid = {
+    'image/gif': () => contents.subarray(0, 6).toString('ascii') === 'GIF87a'
+      || contents.subarray(0, 6).toString('ascii') === 'GIF89a',
+    'image/jpeg': () => contents[0] === 0xff && contents[1] === 0xd8 && contents[2] === 0xff,
+    'image/png': () => contents.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])),
+    'image/webp': () => contents.subarray(0, 4).toString('ascii') === 'RIFF'
+      && contents.subarray(8, 12).toString('ascii') === 'WEBP',
+  }[contentType]?.();
+  if (!valid) throw new Error(`${label} content does not match ${contentType}`);
+}
+
+async function mapWithConcurrency(items, concurrency, mapper) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+  const workers = Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+    while (nextIndex < items.length) {
+      const index = nextIndex++;
+      results[index] = await mapper(items[index], index);
+    }
+  });
+  await Promise.all(workers);
+  return results;
 }
 
 function resolveInsideRoot(root, relativePath, label) {
@@ -170,10 +267,6 @@ function normalizeHttpsUrl(value, label) {
   } catch {
     throw new Error(`${label} must be a public HTTPS URL`);
   }
-}
-
-function encodePath(path) {
-  return path.split('/').map(encodeURIComponent).join('/');
 }
 
 function resolveCommit(root) {

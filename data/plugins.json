@@ -1,204 +1,94 @@
 {
   "schemaVersion": 1,
-  "guideUrl": "https://github.com/vladelaina/Catime-Plugins/blob/main/i18n/PLUGIN_GUIDE_zh-CN.md",
   "plugins": [
     {
       "id": "time_date_weekday",
       "file": "plugins/time_date_weekday.bat",
-      "name": { "en": "Time, Date & Weekday", "zh": "时间、日期与星期" },
-      "description": { "en": "Shows the current time together with the date and weekday.", "zh": "同时显示当前时间、日期和星期。" },
-      "category": "clock",
-      "runtime": "windows",
-      "requiresNetwork": false,
-      "configurable": false,
       "previewUrl": "https://github.com/user-attachments/assets/489a5962-de84-4492-8b95-ad03d07da77c"
     },
     {
       "id": "animation",
       "file": "plugins/animation.bat",
-      "name": { "en": "ASCII Animation", "zh": "字符动画" },
-      "description": { "en": "Renders a smooth spinning ASCII animation in the Catime window.", "zh": "在 Catime 窗口中显示流畅的旋转字符动画。" },
-      "category": "visual",
-      "runtime": "windows",
-      "requiresNetwork": false,
-      "configurable": false,
       "previewUrl": "https://github.com/user-attachments/assets/12e8b002-1d85-45c4-a7b2-42b3108a2601"
     },
     {
       "id": "bilibili_monitor_video",
       "file": "plugins/bilibili_monitor_video.bat",
-      "name": { "en": "Bilibili Video Stats", "zh": "B站视频数据" },
-      "description": { "en": "Tracks live viewers, plays, likes, coins, favorites and shares for a Bilibili video.", "zh": "追踪 B 站视频的在看、播放、点赞、投币、收藏和转发数据。" },
-      "category": "social",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/1ddbf02d-3c73-48d1-ba63-5baba3fb8a80"
     },
     {
       "id": "bilibili_uploader_fans",
       "file": "plugins/bilibili_uploader_fans.bat",
-      "name": { "en": "Bilibili Follower Count", "zh": "B站粉丝数" },
-      "description": { "en": "Displays the current follower count for a configured Bilibili creator.", "zh": "显示指定 B 站 UP 主的当前粉丝数。" },
-      "category": "social",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/7c999909-8c1c-4dc8-bd38-546e757bd046"
     },
     {
       "id": "bitcoin_monitor",
       "file": "plugins/bitcoin_monitor.bat",
-      "name": { "en": "Bitcoin Price", "zh": "比特币价格" },
-      "description": { "en": "Displays Bitcoin market price and recent movement using CoinGecko data.", "zh": "通过 CoinGecko 数据显示比特币价格及近期变化。" },
-      "category": "market",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": false,
       "previewUrl": "https://github.com/user-attachments/assets/f9753da5-3945-465a-9b2d-76a9e1b5b3c4"
     },
     {
       "id": "douyin_video",
       "file": "plugins/douyin_video.py",
-      "name": { "en": "Douyin Video Stats", "zh": "抖音视频数据" },
-      "description": { "en": "Tracks engagement statistics for a configured Douyin video.", "zh": "追踪指定抖音视频的互动数据。" },
-      "category": "social",
-      "runtime": "python",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/ce715ecf-c7d5-40ac-ac96-c55401881b61"
     },
     {
       "id": "gaokao_countdown",
       "file": "plugins/gaokao_countdown.bat",
-      "name": { "en": "Gaokao Countdown", "zh": "高考倒计时" },
-      "description": { "en": "Counts down to the next configured Gaokao date without requiring a network connection.", "zh": "无需联网，倒计时至设定的下一次高考日期。" },
-      "category": "productivity",
-      "runtime": "windows",
-      "requiresNetwork": false,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/aadfaad7-a36f-4676-b1cb-4a888dbc6ba0"
     },
     {
       "id": "github_star",
       "file": "plugins/github_star.bat",
-      "name": { "en": "GitHub Stars", "zh": "GitHub Star 数" },
-      "description": { "en": "Monitors the star count of a configured public GitHub repository.", "zh": "监控指定 GitHub 公开仓库的 Star 数量。" },
-      "category": "developer",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/eaa0aafa-d02d-417b-a513-077fcf09fef9"
     },
     {
       "id": "nasdaq_sp500",
       "file": "plugins/nasdaq_sp500.bat",
-      "name": { "en": "NASDAQ & S&P 500", "zh": "纳斯达克与标普 500" },
-      "description": { "en": "Shows current NASDAQ Composite and S&P 500 index values and daily movement.", "zh": "显示纳斯达克综合指数与标普 500 指数的当前点位和日内变化。" },
-      "category": "market",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": false,
       "previewUrl": "https://github.com/user-attachments/assets/e178ed3e-f5fc-47a7-a1fc-2d5ea8b24652"
     },
     {
       "id": "pomodoro_timer",
       "file": "plugins/pomodoro_timer.bat",
-      "name": { "en": "Pomodoro Sessions", "zh": "番茄工作法" },
-      "description": { "en": "Runs a configurable sequence of focus and break countdown sessions.", "zh": "运行可配置的专注与休息倒计时序列。" },
-      "category": "productivity",
-      "runtime": "windows",
-      "requiresNetwork": false,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/04b64847-e853-4f7d-bf61-8f880fd4a97e"
     },
     {
       "id": "quotes",
       "file": "plugins/quotes.bat",
-      "name": { "en": "Random Quotes", "zh": "随机语录" },
-      "description": { "en": "Refreshes the Catime window with a random lighthearted quote.", "zh": "定时在 Catime 窗口中刷新一条随机趣味语录。" },
-      "category": "text",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": false,
       "previewUrl": "https://github.com/user-attachments/assets/0138598f-af41-4f7f-9deb-6c96c648383a"
     },
     {
       "id": "system_monitor",
       "file": "plugins/system_monitor.bat",
-      "name": { "en": "System Monitor", "zh": "系统监控" },
-      "description": { "en": "Displays CPU, memory, disk, network, process and uptime information.", "zh": "显示 CPU、内存、磁盘、网络、进程数量和运行时间。" },
-      "category": "system",
-      "runtime": "windows",
-      "requiresNetwork": false,
-      "configurable": false,
-      "previewUrl": "https://github.com/user-attachments/assets/33815f04-8c01-49e1-b643-45e65bc712c7",
-      "note": { "en": "Initial system sampling can take about five seconds.", "zh": "首次采集系统数据可能需要约五秒。" }
+      "previewUrl": "https://github.com/user-attachments/assets/33815f04-8c01-49e1-b643-45e65bc712c7"
     },
     {
       "id": "twitter_followers",
       "file": "plugins/twitter_followers.bat",
-      "name": { "en": "X Follower Count", "zh": "X 粉丝数" },
-      "description": { "en": "Displays the follower count for a configured X account.", "zh": "显示指定 X 账号的粉丝数量。" },
-      "category": "social",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/0e699c59-e51a-4704-be56-7564f9554f45"
     },
     {
       "id": "twitter_post",
       "file": "plugins/twitter_post.bat",
-      "name": { "en": "X Post Stats", "zh": "X 帖子数据" },
-      "description": { "en": "Tracks likes and replies for a configured X post.", "zh": "追踪指定 X 帖子的点赞和回复数据。" },
-      "category": "social",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/37b959e3-c241-43ce-a003-865cc9f512d7"
     },
     {
       "id": "weather",
       "file": "plugins/weather.bat",
-      "name": { "en": "Weather Forecast", "zh": "天气预报" },
-      "description": { "en": "Shows current weather, temperature, wind, pressure and sunrise information.", "zh": "显示当前天气、温度、风力、气压和日出日落信息。" },
-      "category": "weather",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/8699a7fd-d88a-4348-9f9c-039b5a075f7a"
     },
     {
       "id": "youtube_channel",
       "file": "plugins/youtube_channel.bat",
-      "name": { "en": "YouTube Channel", "zh": "YouTube 频道数据" },
-      "description": { "en": "Displays the subscriber count for a configured YouTube channel.", "zh": "显示指定 YouTube 频道的订阅人数。" },
-      "category": "social",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/7273e482-4ab3-4ddd-ac63-94b4078b1a74"
     },
     {
       "id": "youtube_video",
       "file": "plugins/youtube_video.bat",
-      "name": { "en": "YouTube Video Stats", "zh": "YouTube 视频数据" },
-      "description": { "en": "Tracks views and likes for a configured YouTube video.", "zh": "追踪指定 YouTube 视频的播放量和点赞数。" },
-      "category": "social",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": true,
       "previewUrl": "https://github.com/user-attachments/assets/850a40b7-7d80-4294-8246-b4f88289d08b"
     },
     {
       "id": "gold_monitor",
       "file": "plugins/au-monitor.bat",
-      "name": { "en": "Gold Price", "zh": "黄金价格" },
-      "description": { "en": "Displays the current gold price and price movement from ICBC market data.", "zh": "通过工商银行行情数据显示当前金价和涨跌幅。" },
-      "category": "market",
-      "runtime": "windows",
-      "requiresNetwork": true,
-      "configurable": false,
       "previewUrl": "https://github.com/user-attachments/assets/057fa40a-0eea-4f84-bea7-61ff8ba70560"
     }
   ]

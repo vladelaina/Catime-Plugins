@@ -7,19 +7,13 @@ import { buildPages } from '../scripts/build-pages.mjs';
 
 const fixture = {
   schemaVersion: 1,
-  guideUrl: 'https://github.com/example/plugins/blob/main/GUIDE.md',
   plugins: [{
     id: 'hello_world',
     file: 'plugins/hello_world.bat',
-    name: { en: 'Hello', zh: '你好' },
-    description: { en: 'A test plugin.', zh: '测试插件。' },
-    category: 'test',
-    runtime: 'windows',
-    requiresNetwork: false,
-    configurable: false,
-    previewUrl: 'https://example.com/preview.webp',
+    previewUrl: 'https://github.com/user-attachments/assets/01234567-89ab-cdef-0123-456789abcdef',
   }],
 };
+const previewBytes = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
 test('builds a versioned catalog and preserves plugin bytes', async t => {
   const root = await createFixture();
@@ -33,6 +27,7 @@ test('builds a versioned catalog and preserves plugin bytes', async t => {
     pagesUrl: 'https://example.github.io/plugins',
     commit: '0123456789abcdef0123456789abcdef01234567',
     generatedAt: '2026-08-15T00:00:00.000Z',
+    fetchImpl: fetchPreview,
   });
 
   assert.equal(catalog.count, 1);
@@ -42,7 +37,12 @@ test('builds a versioned catalog and preserves plugin bytes', async t => {
     catalog.plugins[0].downloadUrl,
     'https://example.github.io/plugins/files/hello_world.bat?v=c134b2f85415',
   );
+  assert.match(
+    catalog.plugins[0].previewUrl,
+    /^https:\/\/example\.github\.io\/plugins\/previews\/hello_world\.png\?v=[a-f0-9]{12}$/,
+  );
   assert.deepEqual(await readFile(join(root, '_site/files/hello_world.bat')), sourceBytes);
+  assert.deepEqual(await readFile(join(root, '_site/previews/hello_world.png')), previewBytes);
   assert.deepEqual(JSON.parse(await readFile(join(root, '_site/api/v1/catalog.json'), 'utf8')), catalog);
 });
 
@@ -64,8 +64,21 @@ test('rejects plugin scripts missing from the catalog', async t => {
     writeFile(join(root, 'plugins/unregistered.py'), 'print("hello")\n'),
   ]);
 
-  await assert.rejects(() => buildPages({ root, commit: 'local' }), /not registered/);
+  await assert.rejects(() => buildPages({ root, commit: 'local', fetchImpl: fetchPreview }), /not registered/);
 });
+
+async function fetchPreview() {
+  return {
+    ok: true,
+    status: 200,
+    url: 'https://github-production-user-asset-6210df.s3.amazonaws.com/preview.png',
+    headers: new Headers({
+      'content-length': String(previewBytes.length),
+      'content-type': 'image/png',
+    }),
+    arrayBuffer: async () => Uint8Array.from(previewBytes).buffer,
+  };
+}
 
 async function createFixture() {
   const root = await mkdtemp(join(tmpdir(), 'catime-plugin-pages-'));
