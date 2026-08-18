@@ -7,7 +7,7 @@
     "build": "node scripts/build-pages.mjs",
     "test": "node --test"
   },
-  "dependencies": {
+  "devDependencies": {
     "sharp": "0.35.3"
   }
 }

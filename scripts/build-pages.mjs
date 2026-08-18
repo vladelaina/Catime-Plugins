@@ -158,7 +158,7 @@ function validateEntry(entry, label) {
 
 async function publishPreview({ sourceUrl, id, label, output, pagesUrl, fetchImpl }) {
   const normalizedSource = normalizePreviewSource(sourceUrl, label);
-  const { contents, contentType, extension } = await downloadPreview(fetchImpl, normalizedSource, label);
+  const { contents, extension } = await downloadPreview(fetchImpl, normalizedSource, label);
 
   const poster = await createPoster(contents, label);
   const posterHash = createHash('sha256').update(poster).digest('hex');
@@ -198,7 +198,7 @@ async function downloadPreview(fetchImpl, sourceUrl, label) {
       if (declaredSize > MAX_PREVIEW_BYTES) throw new Error(`exceeds ${MAX_PREVIEW_BYTES} bytes`);
       const contents = await readLimitedResponse(response, MAX_PREVIEW_BYTES, label);
       validateImageSignature(contents, contentType, label);
-      return { contents, contentType, extension };
+      return { contents, extension };
     } catch (error) {
       lastError = error;
       if (attempt < PREVIEW_FETCH_ATTEMPTS) await delay(400 * attempt);
