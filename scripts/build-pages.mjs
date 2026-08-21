@@ -22,11 +22,11 @@ const PREVIEW_CONCURRENCY = 4;
 const PREVIEW_FETCH_ATTEMPTS = 3;
 const PREVIEW_FETCH_TIMEOUT_MS = 60_000;
 const ENTRY_FIELDS = new Set(['id', 'file', 'previewUrl']);
-const PREVIEW_TYPES = new Map([
-  ['image/gif', 'gif'],
-  ['image/jpeg', 'jpg'],
-  ['image/png', 'png'],
-  ['image/webp', 'webp'],
+const PREVIEW_CONTENT_TYPES = new Set([
+  'image/gif',
+  'image/jpeg',
+  'image/png',
+  'image/webp',
 ]);
 
 export async function buildPages({
@@ -158,7 +158,8 @@ function validateEntry(entry, label) {
 
 async function publishPreview({ sourceUrl, id, label, output, pagesUrl, fetchImpl }) {
   const normalizedSource = normalizePreviewSource(sourceUrl, label);
-  const { contents, extension } = await downloadPreview(fetchImpl, normalizedSource, label);
+  const contents = await downloadPreview(fetchImpl, normalizedSource, label);
+  const metadata = await inspectPreview(contents, label);
 
   const poster = await createPoster(contents, label);
   const posterHash = createHash('sha256').update(poster).digest('hex');
@@ -166,12 +167,12 @@ async function publishPreview({ sourceUrl, id, label, output, pagesUrl, fetchImp
   await writeFile(resolve(output, 'posters', posterFilename), poster);
   const posterUrl = `${pagesUrl}/posters/${encodeURIComponent(posterFilename)}?v=${posterHash.slice(0, 12)}`;
 
-  const metadata = await sharp(contents, { limitInputPixels: 40_000_000 }).metadata();
   if ((metadata.pages || 1) <= 1) return { posterUrl, previewUrl: posterUrl };
 
-  const previewHash = createHash('sha256').update(contents).digest('hex');
-  const previewFilename = `${id}.${extension}`;
-  await writeFile(resolve(output, 'previews', previewFilename), contents);
+  const preview = await createAnimatedPreview(contents, label);
+  const previewHash = createHash('sha256').update(preview).digest('hex');
+  const previewFilename = `${id}.webp`;
+  await writeFile(resolve(output, 'previews', previewFilename), preview);
   return {
     posterUrl,
     previewUrl: `${pagesUrl}/previews/${encodeURIComponent(previewFilename)}?v=${previewHash.slice(0, 12)}`,
@@ -191,14 +192,15 @@ async function downloadPreview(fetchImpl, sourceUrl, label) {
       validatePreviewResponseUrl(response.url, label);
 
       const contentType = String(response.headers?.get('content-type') || '').split(';', 1)[0].trim().toLowerCase();
-      const extension = PREVIEW_TYPES.get(contentType);
-      if (!extension) throw new Error(`returned unsupported content type ${contentType || 'unknown'}`);
+      if (!PREVIEW_CONTENT_TYPES.has(contentType)) {
+        throw new Error(`returned unsupported content type ${contentType || 'unknown'}`);
+      }
 
       const declaredSize = Number.parseInt(response.headers?.get('content-length') || '0', 10);
       if (declaredSize > MAX_PREVIEW_BYTES) throw new Error(`exceeds ${MAX_PREVIEW_BYTES} bytes`);
       const contents = await readLimitedResponse(response, MAX_PREVIEW_BYTES, label);
       validateImageSignature(contents, contentType, label);
-      return { contents, extension };
+      return contents;
     } catch (error) {
       lastError = error;
       if (attempt < PREVIEW_FETCH_ATTEMPTS) await delay(400 * attempt);
@@ -209,6 +211,17 @@ async function downloadPreview(fetchImpl, sourceUrl, label) {
 
 function delay(milliseconds) {
   return new Promise(resolveDelay => setTimeout(resolveDelay, milliseconds));
+}
+
+async function inspectPreview(contents, label) {
+  try {
+    return await sharp(contents, {
+      animated: true,
+      limitInputPixels: 40_000_000,
+    }).metadata();
+  } catch (error) {
+    throw new Error(`${label} could not be inspected: ${error.message}`);
+  }
 }
 
 async function createPoster(contents, label) {
@@ -225,6 +238,22 @@ async function createPoster(contents, label) {
     }).toBuffer();
   } catch (error) {
     throw new Error(`${label} could not be optimized: ${error.message}`);
+  }
+}
+
+async function createAnimatedPreview(contents, label) {
+  try {
+    return await sharp(contents, {
+      animated: true,
+      limitInputPixels: 40_000_000,
+    }).webp({
+      quality: 82,
+      alphaQuality: 90,
+      smartSubsample: true,
+      effort: 4,
+    }).toBuffer();
+  } catch (error) {
+    throw new Error(`${label} animation could not be optimized: ${error.message}`);
   }
 }
 
